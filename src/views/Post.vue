@@ -468,6 +468,21 @@ async function fetchViews(postId) {
   background: var(--bg);
 }
 
+.post-content :deep(.mermaid-diagram) {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  margin: 24px 0;
+  border: 1px solid var(--border);
+  overflow-x: auto;
+  text-align: center;
+}
+
+.post-content :deep(.mermaid-diagram svg) {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+}
 
 .toc-sidebar {
   position: relative;
