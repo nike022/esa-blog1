@@ -79,7 +79,7 @@ watch(renderedContent, async (newContent) => {
   if (newContent) {
     await nextTick()
     await nextTick()
-    renderMermaid()
+    await renderMermaid()
     addCopyButtons()
     wrapTables()
     highlightCode()
@@ -108,7 +108,7 @@ const renderMermaid = async () => {
 }
 
 const addCopyButtons = () => {
-  const codeBlocks = document.querySelectorAll('pre:not(.has-copy-button)')
+  const codeBlocks = document.querySelectorAll('pre:not(.has-copy-button):not(:has(code.language-mermaid))')
 
   codeBlocks.forEach(pre => {
     const button = document.createElement('button')
