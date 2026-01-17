@@ -6,6 +6,9 @@
       <div v-else class="post-layout">
         <!-- Main Content -->
         <article class="post-article">
+          <!-- Breadcrumb -->
+          <Breadcrumb :items="breadcrumbItems" />
+
           <div class="post-header">
             <div class="post-category">{{ post.category || '未分类' }}</div>
             <h1 class="post-title">{{ post.title }}</h1>
@@ -54,6 +57,7 @@ import TableOfContents from '../components/TableOfContents.vue'
 import PostNavigation from '../components/PostNavigation.vue'
 import ScrollToTop from '../components/ScrollToTop.vue'
 import WalineComment from '../components/WalineComment.vue'
+import Breadcrumb from '../components/Breadcrumb.vue'
 
 // Configure marked with KaTeX extension
 marked.use(markedKatex({ throwOnError: false }))
@@ -73,6 +77,20 @@ const contentProcessed = ref(false)
 const renderedContent = computed(() => {
   if (!post.value) return ''
   return marked(post.value.content)
+})
+
+const breadcrumbItems = computed(() => {
+  if (!post.value) return []
+  return [
+    {
+      label: post.value.category || '未分类',
+      to: null
+    },
+    {
+      label: post.value.title,
+      to: null
+    }
+  ]
 })
 
 // Process content after DOM updates
