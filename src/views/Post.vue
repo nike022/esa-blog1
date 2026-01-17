@@ -58,7 +58,18 @@ import ScrollToTop from '../components/ScrollToTop.vue'
 marked.use(markedKatex({ throwOnError: false }))
 
 // Initialize Mermaid
-mermaid.initialize({ startOnLoad: false, theme: 'default' })
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'neutral',
+  themeVariables: {
+    primaryColor: '#6366f1',
+    primaryTextColor: '#1f2937',
+    primaryBorderColor: '#6366f1',
+    lineColor: '#6366f1',
+    secondaryColor: '#f3f4f6',
+    tertiaryColor: '#fff'
+  }
+})
 
 const route = useRoute()
 const post = ref(null)
@@ -428,7 +439,6 @@ async function fetchViews(postId) {
 .post-content :deep(.table-wrapper) {
   overflow-x: auto;
   margin: 24px 0;
-  border: 1px solid var(--border);
   border-radius: 8px;
 }
 
@@ -437,6 +447,7 @@ async function fetchViews(postId) {
   border-collapse: collapse;
   margin: 0;
   background: var(--bg-secondary);
+  border: 1px solid var(--border);
 }
 
 .post-content :deep(thead) {
@@ -477,21 +488,18 @@ async function fetchViews(postId) {
 }
 
 .post-content :deep(.mermaid-diagram) {
-  background: white;
   padding: 24px;
   border-radius: 12px;
   margin: 24px 0;
   border: 1px solid var(--border);
   overflow-x: auto;
-}
-
-[data-theme="dark"] .post-content :deep(.mermaid-diagram) {
-  background: #1e1e1e;
+  text-align: center;
 }
 
 .post-content :deep(.mermaid-diagram svg) {
   max-width: 100%;
   height: auto;
+  display: inline-block;
 }
 
 .toc-sidebar {
