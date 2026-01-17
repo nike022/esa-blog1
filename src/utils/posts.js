@@ -1,14 +1,7 @@
 import { marked } from 'marked'
-import hljs from 'highlight.js'
 
-// 配置 marked
+// 配置 marked - 移除 highlight 选项，让客户端处理代码高亮
 marked.setOptions({
-  highlight: function(code, lang) {
-    if (lang && hljs.getLanguage(lang)) {
-      return hljs.highlight(code, { language: lang }).value
-    }
-    return hljs.highlightAuto(code).value
-  },
   breaks: true,
   gfm: true
 })
