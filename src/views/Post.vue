@@ -77,12 +77,18 @@ const renderedContent = computed(() => {
 // Watch for content changes and render Mermaid
 watch(renderedContent, async (newContent) => {
   if (newContent) {
+    console.log('📝 Content rendered, length:', newContent.length)
     await nextTick()
     await nextTick()
+    console.log('🎨 Starting Mermaid rendering...')
     await renderMermaid()
+    console.log('📋 Adding copy buttons...')
     addCopyButtons()
+    console.log('📊 Wrapping tables...')
     wrapTables()
+    console.log('💻 Highlighting code...')
     highlightCode()
+    console.log('✅ All rendering complete')
   }
 })
 
