@@ -89,15 +89,30 @@ watch(renderedContent, async (newContent) => {
 const renderMermaid = async () => {
   console.log('🎨 === Mermaid Rendering Start ===')
   await nextTick()
+
+  // Debug: Check the rendered HTML content
+  const postContent = document.querySelector('.post-content')
+  if (postContent) {
+    console.log('📄 Post content HTML length:', postContent.innerHTML.length)
+    console.log('📄 Post content preview:', postContent.innerHTML.substring(0, 500))
+  } else {
+    console.error('❌ .post-content element not found!')
+  }
+
   const codeBlocks = document.querySelectorAll('pre code.language-mermaid')
   console.log(`🔍 Found ${codeBlocks.length} Mermaid code blocks`)
 
   if (codeBlocks.length === 0) {
     console.warn('⚠️ No Mermaid blocks found. Checking all code blocks:')
     const allCodeBlocks = document.querySelectorAll('pre code')
+    console.log(`  Total code blocks found: ${allCodeBlocks.length}`)
     allCodeBlocks.forEach((block, i) => {
-      console.log(`  Code block ${i + 1}: class="${block.className}"`)
+      console.log(`  Code block ${i + 1}: class="${block.className}", text preview: "${block.textContent.substring(0, 50)}"`)
     })
+
+    // Also check for any pre elements
+    const allPre = document.querySelectorAll('pre')
+    console.log(`  Total <pre> elements found: ${allPre.length}`)
   }
 
   for (let i = 0; i < codeBlocks.length; i++) {
