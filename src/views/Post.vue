@@ -97,27 +97,25 @@ watch(renderedContent, async (newContent) => {
     console.log('📝 Content rendered, length:', newContent.length)
     await nextTick()
     await nextTick()
+    await nextTick() // Extra wait for v-html to complete
 
     // Debug: Log the actual DOM structure
-    const contentDiv = document.querySelector('.post-content')
-    if (contentDiv) {
-      const allPre = contentDiv.querySelectorAll('pre')
-      const allCode = contentDiv.querySelectorAll('code')
-      console.log(`🔍 DEBUG: Found ${allPre.length} <pre> elements`)
-      console.log(`🔍 DEBUG: Found ${allCode.length} <code> elements`)
+    const allPre = document.querySelectorAll('.post-content pre')
+    const allCode = document.querySelectorAll('.post-content code')
+    console.log(`🔍 DEBUG: Found ${allPre.length} <pre> elements in .post-content`)
+    console.log(`🔍 DEBUG: Found ${allCode.length} <code> elements in .post-content`)
 
-      // Log first few pre/code elements to see their structure
-      allPre.forEach((pre, i) => {
-        if (i < 3) {
-          const code = pre.querySelector('code')
-          console.log(`🔍 DEBUG: <pre> ${i + 1}:`, {
-            hasCode: !!code,
-            codeClasses: code?.className || 'no code element',
-            textPreview: pre.textContent.substring(0, 50)
-          })
-        }
-      })
-    }
+    // Log first few pre/code elements to see their structure
+    allPre.forEach((pre, i) => {
+      if (i < 3) {
+        const code = pre.querySelector('code')
+        console.log(`🔍 DEBUG: <pre> ${i + 1}:`, {
+          hasCode: !!code,
+          codeClasses: code?.className || 'no code element',
+          textPreview: pre.textContent.substring(0, 50)
+        })
+      }
+    })
 
     console.log('🎨 Starting Mermaid rendering...')
     await renderMermaid()
