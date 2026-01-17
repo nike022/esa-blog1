@@ -114,6 +114,7 @@ const tags = computed(() => {
   return Object.entries(tagMap)
     .map(([name, count]) => ({ name, count }))
     .sort((a, b) => b.count - a.count)
+    .slice(0, 15)
 })
 
 const archives = computed(() => {
@@ -128,7 +129,7 @@ const archives = computed(() => {
     .sort((a, b) => b.date.localeCompare(a.date))
 })
 
-const recentPosts = computed(() => props.posts.slice(0, 5))
+const recentPosts = computed(() => props.posts.slice(0, 8))
 
 const getTagSize = (count) => {
   const maxCount = Math.max(...tags.value.map(t => t.count))
@@ -241,17 +242,19 @@ const formatDate = (dateString) => {
 }
 
 .tag-item {
-  color: white;
-  background: var(--primary);
+  color: var(--text-primary);
+  background: var(--bg);
   padding: 4px 12px;
   border-radius: 16px;
   cursor: pointer;
   transition: all 0.2s;
   font-weight: 500;
+  border: 1px solid var(--border);
 }
 
 .tag-item:hover {
-  opacity: 0.8;
+  background: var(--primary);
+  color: white;
   transform: translateY(-2px);
 }
 
