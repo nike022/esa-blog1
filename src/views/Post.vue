@@ -16,7 +16,14 @@
               <span>✍️ {{ post.author }}</span>
             </div>
             <div class="post-tags">
-              <span v-for="tag in post.tags" :key="tag" class="tag">#{{ tag }}</span>
+              <router-link
+                v-for="tag in post.tags"
+                :key="tag"
+                :to="`/tags?tag=${tag}`"
+                class="tag"
+              >
+                #{{ tag }}
+              </router-link>
             </div>
           </div>
 

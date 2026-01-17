@@ -41,8 +41,10 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { getAllPosts } from '../utils/posts'
 
+const route = useRoute()
 const posts = ref([])
 const loading = ref(true)
 const selectedTag = ref(null)
@@ -91,6 +93,11 @@ const getExcerpt = (content) => {
 onMounted(async () => {
   posts.value = await getAllPosts()
   loading.value = false
+
+  // Check if there's a tag query parameter
+  if (route.query.tag) {
+    selectedTag.value = route.query.tag
+  }
 })
 </script>
 
