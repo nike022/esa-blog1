@@ -76,7 +76,7 @@ const allPosts = ref([])
 const displayedPosts = ref([])
 const loading = ref(true)
 const currentPage = ref(1)
-const postsPerPage = 10
+const postsPerPage = 8
 
 const paginatedPosts = computed(() => {
   const start = (currentPage.value - 1) * postsPerPage
