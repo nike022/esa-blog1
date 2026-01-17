@@ -4,6 +4,9 @@
       <div v-if="loading" class="loading">加载中...</div>
       <div v-else-if="error" class="error">{{ error }}</div>
       <div v-else class="post-layout">
+        <!-- Breadcrumb -->
+        <Breadcrumb :items="breadcrumbItems" />
+
         <!-- Main Content -->
         <article class="post-article">
           <div class="post-header">
@@ -53,6 +56,7 @@ import { getPost, getAdjacentPosts } from '../utils/posts'
 import TableOfContents from '../components/TableOfContents.vue'
 import PostNavigation from '../components/PostNavigation.vue'
 import ScrollToTop from '../components/ScrollToTop.vue'
+import Breadcrumb from '../components/Breadcrumb.vue'
 
 // Configure marked with KaTeX extension
 marked.use(markedKatex({ throwOnError: false }))
@@ -73,6 +77,14 @@ const contentProcessed = ref(false)
 const renderedContent = computed(() => {
   if (!post.value) return ''
   return marked(post.value.content)
+})
+
+const breadcrumbItems = computed(() => {
+  if (!post.value) return []
+  return [
+    { label: post.value.category || '未分类', to: '/categories' },
+    { label: post.value.title }
+  ]
 })
 
 // Process content after DOM updates
