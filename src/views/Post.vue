@@ -354,6 +354,7 @@ async function fetchViews(postId) {
   overflow-x: auto;
   margin: 24px 0;
   border: 1px solid var(--border);
+  color: #ffffff;
 }
 
 .post-content :deep(pre.has-copy-button) {
@@ -388,6 +389,7 @@ async function fetchViews(postId) {
   background: none;
   padding: 0;
   border: none;
+  color: #ffffff;
 }
 
 .post-content :deep(a) {
