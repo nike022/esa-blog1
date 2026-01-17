@@ -87,24 +87,46 @@ watch(renderedContent, async (newContent) => {
 })
 
 const renderMermaid = async () => {
+  console.log('🎨 === Mermaid Rendering Start ===')
   await nextTick()
   const codeBlocks = document.querySelectorAll('pre code.language-mermaid')
+  console.log(`🔍 Found ${codeBlocks.length} Mermaid code blocks`)
+
+  if (codeBlocks.length === 0) {
+    console.warn('⚠️ No Mermaid blocks found. Checking all code blocks:')
+    const allCodeBlocks = document.querySelectorAll('pre code')
+    allCodeBlocks.forEach((block, i) => {
+      console.log(`  Code block ${i + 1}: class="${block.className}"`)
+    })
+  }
 
   for (let i = 0; i < codeBlocks.length; i++) {
     const codeBlock = codeBlocks[i]
     const code = codeBlock.textContent
     const pre = codeBlock.parentElement
 
+    console.log(`📊 Processing Mermaid block ${i + 1}/${codeBlocks.length}`)
+    console.log(`  Code length: ${code.length}`)
+    console.log(`  Code preview: ${code.substring(0, 100)}...`)
+    console.log(`  Parent element: ${pre.tagName}`)
+
     try {
+      console.log(`  🔄 Calling mermaid.render()...`)
       const { svg } = await mermaid.render(`mermaid-${Date.now()}-${i}`, code)
+      console.log(`  ✅ Render successful, SVG length: ${svg.length}`)
+
       const div = document.createElement('div')
       div.className = 'mermaid-diagram'
       div.innerHTML = svg
+      console.log(`  🔄 Replacing <pre> with <div class="mermaid-diagram">`)
       pre.replaceWith(div)
+      console.log(`  ✅ Replacement complete for block ${i + 1}`)
     } catch (error) {
-      console.error('Mermaid rendering error:', error)
+      console.error(`❌ Mermaid rendering error for block ${i + 1}:`, error)
+      console.error(`  Failed code:`, code)
     }
   }
+  console.log('✨ === Mermaid Rendering Complete ===')
 }
 
 const addCopyButtons = () => {
