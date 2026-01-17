@@ -55,7 +55,8 @@ export async function getAllPosts() {
     const { metadata, content } = parseFrontmatter(markdown)
     const id = path.split('/').pop().replace('.md', '')
     const htmlContent = marked(content)
-    const excerpt = content.substring(0, 150).replace(/[#*`]/g, '') + '...'
+    const plainText = htmlContent.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
+    const excerpt = plainText.substring(0, 150) + '...'
 
     posts.push({
       id,
