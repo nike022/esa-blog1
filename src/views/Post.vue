@@ -12,9 +12,6 @@
             <div class="post-meta">
               <span>📅 {{ formatDate(post.date) }}</span>
               <span>✍️ {{ post.author }}</span>
-              <span v-if="views !== null" class="views">
-                👁️ {{ views }} 次浏览
-              </span>
             </div>
             <div class="post-tags">
               <span v-for="tag in post.tags" :key="tag" class="tag">#{{ tag }}</span>
@@ -64,7 +61,6 @@ const route = useRoute()
 const post = ref(null)
 const loading = ref(true)
 const error = ref('')
-const views = ref(null)
 const readingProgress = ref(0)
 const prevPost = ref(null)
 const nextPost = ref(null)
@@ -246,7 +242,6 @@ onMounted(async () => {
   const postData = await getPost(route.params.id)
   if (postData) {
     post.value = postData
-    fetchViews(route.params.id)
 
     // 获取相邻文章
     const adjacent = await getAdjacentPosts(route.params.id)
@@ -264,32 +259,6 @@ onMounted(async () => {
 onUnmounted(() => {
   window.removeEventListener('scroll', updateReadingProgress)
 })
-
-async function fetchViews(postId) {
-  try {
-    // 先增加阅读量
-    const incrementResponse = await fetch(`/api/views?postId=${postId}`, {
-      method: 'POST'
-    })
-
-    if (incrementResponse.ok) {
-      const data = await incrementResponse.json()
-      views.value = data.views
-    }
-  } catch (e) {
-    console.error('Failed to update views:', e)
-    // 如果增加失败,尝试只获取当前阅读量
-    try {
-      const getResponse = await fetch(`/api/views?postId=${postId}`)
-      if (getResponse.ok) {
-        const data = await getResponse.json()
-        views.value = data.views
-      }
-    } catch (err) {
-      console.error('Failed to fetch views:', err)
-    }
-  }
-}
 </script>
 
 <style scoped>
