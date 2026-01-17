@@ -32,7 +32,7 @@
                     <router-link :to="`/post/${post.id}`" class="post-title-link">
                       <h2 class="post-title">{{ post.title }}</h2>
                     </router-link>
-                    <p class="post-excerpt">{{ post.excerpt }}</p>
+                    <p class="post-excerpt">{{ getExcerpt(post.content) }}</p>
                     <div class="post-meta">
                       <span class="post-date">📅 {{ formatDate(post.date) }}</span>
                       <span class="post-author">✍️ {{ post.author }}</span>
@@ -103,7 +103,7 @@ const handleSearch = (query) => {
   const lowerQuery = query.toLowerCase()
   displayedPosts.value = allPosts.value.filter(post =>
     post.title.toLowerCase().includes(lowerQuery) ||
-    post.excerpt.toLowerCase().includes(lowerQuery) ||
+    (post.content && post.content.toLowerCase().includes(lowerQuery)) ||
     (post.tags && post.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))
   )
 }
@@ -134,6 +134,22 @@ const formatDate = (dateString) => {
     month: 'long',
     day: 'numeric'
   })
+}
+
+const getExcerpt = (content) => {
+  if (!content) return ''
+  // Remove markdown syntax and get first 100 characters
+  const plainText = content
+    .replace(/^#+\s+/gm, '') // Remove headers
+    .replace(/\*\*(.+?)\*\*/g, '$1') // Remove bold
+    .replace(/\*(.+?)\*/g, '$1') // Remove italic
+    .replace(/\[(.+?)\]\(.+?\)/g, '$1') // Remove links
+    .replace(/`(.+?)`/g, '$1') // Remove inline code
+    .replace(/^\s*[-*+]\s+/gm, '') // Remove list markers
+    .replace(/\n+/g, ' ') // Replace newlines with spaces
+    .trim()
+
+  return plainText.length > 100 ? plainText.substring(0, 100) + '...' : plainText
 }
 
 onMounted(async () => {

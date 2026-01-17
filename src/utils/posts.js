@@ -1,11 +1,3 @@
-import { marked } from 'marked'
-
-// 配置 marked - 移除 highlight 选项，让客户端处理代码高亮
-marked.setOptions({
-  breaks: true,
-  gfm: true
-})
-
 // 解析 Markdown 文件的 frontmatter
 export function parseFrontmatter(markdown) {
   const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/
@@ -35,13 +27,6 @@ export function parseFrontmatter(markdown) {
   return { metadata, content: content.trim() }
 }
 
-// 解码 HTML 实体
-function decodeHtmlEntities(text) {
-  const textarea = document.createElement('textarea')
-  textarea.innerHTML = text
-  return textarea.value
-}
-
 // 获取所有文章
 export async function getAllPosts() {
   const postModules = import.meta.glob('/src/posts/*.md', {
@@ -54,21 +39,11 @@ export async function getAllPosts() {
     const markdown = await postModules[path]()
     const { metadata, content } = parseFrontmatter(markdown)
     const id = path.split('/').pop().replace('.md', '')
-    const htmlContent = marked(content)
-
-    // 提取纯文本并生成摘要
-    const plainText = htmlContent.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
-    const decodedText = decodeHtmlEntities(plainText)
-
-    // 只取第一段或前100个字符作为摘要
-    const firstParagraph = decodedText.split(/[。！？\n]/).filter(s => s.trim().length > 0)[0] || decodedText
-    const excerpt = firstParagraph.length > 100 ? firstParagraph.substring(0, 100) + '...' : firstParagraph + '...'
 
     posts.push({
       id,
       ...metadata,
-      content: htmlContent,
-      excerpt
+      content
     })
   }
 
@@ -87,11 +62,10 @@ export async function getPost(id) {
   if (postModules[path]) {
     const markdown = await postModules[path]()
     const { metadata, content } = parseFrontmatter(markdown)
-    const htmlContent = marked(content)
     return {
       id,
       ...metadata,
-      content: htmlContent
+      content
     }
   }
 

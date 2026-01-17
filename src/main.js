@@ -4,7 +4,6 @@ import App from './App.vue'
 import Home from './views/Home.vue'
 import Post from './views/Post.vue'
 import About from './views/About.vue'
-import 'highlight.js/styles/atom-one-dark.css'
 
 const router = createRouter({
   history: createWebHistory(),

@@ -58,24 +58,7 @@ import ScrollToTop from '../components/ScrollToTop.vue'
 marked.use(markedKatex({ throwOnError: false }))
 
 // Initialize Mermaid
-mermaid.initialize({
-  startOnLoad: false,
-  theme: 'default',
-  themeVariables: {
-    primaryColor: '#bbdefb',
-    primaryTextColor: '#000',
-    primaryBorderColor: '#1976d2',
-    lineColor: '#1976d2',
-    secondaryColor: '#e3f2fd',
-    tertiaryColor: '#fff',
-    background: '#fff',
-    mainBkg: '#bbdefb',
-    secondBkg: '#e3f2fd',
-    textColor: '#000',
-    border1: '#1976d2',
-    border2: '#64b5f6'
-  }
-})
+mermaid.initialize({ startOnLoad: false, theme: 'default' })
 
 const route = useRoute()
 const post = ref(null)
@@ -94,88 +77,40 @@ const renderedContent = computed(() => {
 // Watch for content changes and render Mermaid
 watch(renderedContent, async (newContent) => {
   if (newContent) {
-    console.log('📝 Content rendered, length:', newContent.length)
     await nextTick()
     await nextTick()
-    await nextTick() // Extra wait for v-html to complete
-
-    // Debug: Log the actual DOM structure
-    const allPre = document.querySelectorAll('.post-content pre')
-    const allCode = document.querySelectorAll('.post-content code')
-    console.log(`🔍 DEBUG: Found ${allPre.length} <pre> elements in .post-content`)
-    console.log(`🔍 DEBUG: Found ${allCode.length} <code> elements in .post-content`)
-
-    // Log first few pre/code elements to see their structure
-    allPre.forEach((pre, i) => {
-      if (i < 3) {
-        const code = pre.querySelector('code')
-        console.log(`🔍 DEBUG: <pre> ${i + 1}:`, {
-          hasCode: !!code,
-          codeClasses: code?.className || 'no code element',
-          textPreview: pre.textContent.substring(0, 50)
-        })
-      }
-    })
-
-    console.log('🎨 Starting Mermaid rendering...')
-    await renderMermaid()
-    console.log('📋 Adding copy buttons...')
+    renderMermaid()
     addCopyButtons()
-    console.log('📊 Wrapping tables...')
     wrapTables()
-    console.log('💻 Highlighting code...')
     highlightCode()
-    console.log('✅ All rendering complete')
   }
 })
-
-const decodeHtmlEntities = (text) => {
-  const textarea = document.createElement('textarea')
-  textarea.innerHTML = text
-  return textarea.value
-}
 
 const renderMermaid = async () => {
   await nextTick()
   const codeBlocks = document.querySelectorAll('pre code.language-mermaid')
-  console.log(`🔍 Found ${codeBlocks.length} Mermaid code blocks`)
 
   for (let i = 0; i < codeBlocks.length; i++) {
     const codeBlock = codeBlocks[i]
-    let code = codeBlock.textContent.trim()
+    const code = codeBlock.textContent
     const pre = codeBlock.parentElement
-
-    console.log(`📊 Processing Mermaid block ${i + 1}:`, code.substring(0, 50) + '...')
-
-    if (!code) {
-      console.warn(`⚠️ Block ${i + 1} is empty, skipping`)
-      continue
-    }
-
-    code = decodeHtmlEntities(code)
-    console.log(`🔤 Decoded HTML entities for block ${i + 1}`)
 
     try {
       const { svg } = await mermaid.render(`mermaid-${Date.now()}-${i}`, code)
-      console.log(`✅ Successfully rendered Mermaid block ${i + 1}, SVG length: ${svg.length}`)
       const div = document.createElement('div')
       div.className = 'mermaid-diagram'
       div.innerHTML = svg
       pre.replaceWith(div)
-      console.log(`🔄 Replaced <pre> with <div class="mermaid-diagram"> for block ${i + 1}`)
     } catch (error) {
-      console.error(`❌ Mermaid rendering error for block ${i + 1}:`, error)
-      console.error(`Code that failed:`, code)
+      console.error('Mermaid rendering error:', error)
     }
   }
-  console.log(`✨ Mermaid rendering complete`)
 }
 
 const addCopyButtons = () => {
   const codeBlocks = document.querySelectorAll('pre:not(.has-copy-button)')
-  console.log(`📋 Found ${codeBlocks.length} code blocks without copy buttons`)
 
-  codeBlocks.forEach((pre, index) => {
+  codeBlocks.forEach(pre => {
     const button = document.createElement('button')
     button.className = 'copy-button'
     button.textContent = '复制'
@@ -184,7 +119,6 @@ const addCopyButtons = () => {
       if (code) {
         try {
           await navigator.clipboard.writeText(code.textContent)
-          console.log(`✅ Copied code block ${index + 1} to clipboard`)
           button.textContent = '已复制!'
           button.classList.add('copied')
           setTimeout(() => {
@@ -192,7 +126,7 @@ const addCopyButtons = () => {
             button.classList.remove('copied')
           }, 2000)
         } catch (err) {
-          console.error(`❌ Failed to copy code block ${index + 1}:`, err)
+          console.error('复制失败:', err)
           button.textContent = '复制失败'
           setTimeout(() => {
             button.textContent = '复制'
@@ -202,15 +136,23 @@ const addCopyButtons = () => {
     }
     pre.appendChild(button)
     pre.classList.add('has-copy-button')
-    console.log(`➕ Added copy button to code block ${index + 1}`)
   })
-  console.log(`✨ Copy buttons added to all code blocks`)
 }
 
 const wrapTables = () => {
   const tables = document.querySelectorAll('.post-content table:not(.wrapped)')
 
-  tables.forEach((table) => {
+  console.log('=== Table Debug ===')
+  console.log('Found tables:', tables.length)
+
+  tables.forEach((table, index) => {
+    console.log(`Table ${index}:`, {
+      rows: table.rows.length,
+      columns: table.rows[0]?.cells.length,
+      hasTheadElement: !!table.querySelector('thead'),
+      hasTbodyElement: !!table.querySelector('tbody')
+    })
+
     const wrapper = document.createElement('div')
     wrapper.className = 'table-wrapper'
     table.parentNode.insertBefore(wrapper, table)
@@ -220,16 +162,10 @@ const wrapTables = () => {
 }
 
 const highlightCode = () => {
-  const codeBlocks = document.querySelectorAll('pre code:not(.hljs):not(.language-mermaid)')
-  console.log(`💻 Found ${codeBlocks.length} code blocks to highlight`)
-
-  codeBlocks.forEach((block, index) => {
-    const language = block.className.match(/language-(\w+)/)?.[1] || 'plaintext'
-    console.log(`🎨 Highlighting code block ${index + 1} (language: ${language})`)
+  const codeBlocks = document.querySelectorAll('pre code:not(.hljs)')
+  codeBlocks.forEach(block => {
     hljs.highlightElement(block)
-    console.log(`✅ Highlighted code block ${index + 1}`)
   })
-  console.log(`✨ Code highlighting complete`)
 }
 
 const formatDate = (dateString) => {
@@ -415,10 +351,9 @@ async function fetchViews(postId) {
   background: #282c34;
   padding: 24px;
   border-radius: 12px;
+  overflow-x: auto;
   margin: 24px 0;
   border: 1px solid var(--border);
-  white-space: pre-wrap;
-  word-wrap: break-word;
 }
 
 .post-content :deep(pre.has-copy-button) {
@@ -485,6 +420,7 @@ async function fetchViews(postId) {
 .post-content :deep(.table-wrapper) {
   overflow-x: auto;
   margin: 24px 0;
+  border: 1px solid var(--border);
   border-radius: 8px;
 }
 
@@ -493,7 +429,6 @@ async function fetchViews(postId) {
   border-collapse: collapse;
   margin: 0;
   background: var(--bg-secondary);
-  border: 1px solid var(--border);
 }
 
 .post-content :deep(thead) {
@@ -533,21 +468,6 @@ async function fetchViews(postId) {
   background: var(--bg);
 }
 
-.post-content :deep(.mermaid-diagram) {
-  background: #ffffff;
-  padding: 24px;
-  border-radius: 12px;
-  margin: 24px 0;
-  border: 1px solid var(--border);
-  overflow-x: auto;
-  text-align: center;
-}
-
-.post-content :deep(.mermaid-diagram svg) {
-  max-width: 100%;
-  height: auto;
-  display: inline-block;
-}
 
 .toc-sidebar {
   position: relative;
