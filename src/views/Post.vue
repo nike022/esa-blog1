@@ -69,7 +69,7 @@ watch(renderedContent, async (newContent) => {
   if (newContent) {
     await nextTick()
     await nextTick()
-    renderMermaid()
+    await renderMermaid()
     addCopyButtons()
     wrapTables()
     highlightCode()
