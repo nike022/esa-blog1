@@ -10,7 +10,6 @@
           <Breadcrumb :items="breadcrumbItems" />
 
           <div class="post-header">
-            <div class="post-category">{{ post.category || '未分类' }}</div>
             <h1 class="post-title">{{ post.title }}</h1>
             <div class="post-meta">
               <span>📅 {{ formatDate(post.date) }}</span>
