@@ -47,15 +47,15 @@
     <div class="sidebar-section">
       <h3 class="section-title">归档</h3>
       <div class="archive-list">
-        <div
+        <router-link
           v-for="archive in archives"
           :key="archive.date"
+          :to="'/archive'"
           class="archive-item"
-          @click="$emit('filter', { type: 'archive', value: archive.date })"
         >
           <span class="archive-date">{{ archive.date }}</span>
           <span class="archive-count">{{ archive.count }}</span>
-        </div>
+        </router-link>
       </div>
     </div>
 
@@ -72,6 +72,27 @@
           <div class="recent-post-title">{{ post.title }}</div>
           <div class="recent-post-date">{{ formatDate(post.date) }}</div>
         </router-link>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="sidebar-section">
+      <h3 class="section-title">文章时间轴</h3>
+      <div class="timeline">
+        <div
+          v-for="post in timelinePosts"
+          :key="post.id"
+          class="timeline-item"
+        >
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <router-link :to="`/post/${post.id}`" class="timeline-title">
+              {{ post.title }}
+            </router-link>
+            <div class="timeline-date">{{ formatFullDate(post.date) }}</div>
+            <div class="timeline-category">{{ post.category }}</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -131,6 +152,8 @@ const archives = computed(() => {
 
 const recentPosts = computed(() => props.posts.slice(0, 8))
 
+const timelinePosts = computed(() => props.posts.slice(0, 10))
+
 const getTagSize = (count) => {
   const maxCount = Math.max(...tags.value.map(t => t.count))
   const minSize = 12
@@ -148,6 +171,15 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString('zh-CN', {
     month: 'long',
     day: 'numeric'
+  })
+}
+
+const formatFullDate = (dateString) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
   })
 }
 </script>
@@ -291,5 +323,76 @@ const formatDate = (dateString) => {
 .recent-post-date {
   font-size: 12px;
   color: var(--text-secondary);
+}
+
+.timeline {
+  position: relative;
+  padding-left: 20px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 20px;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -17px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid var(--bg-secondary);
+  z-index: 1;
+}
+
+.timeline-content {
+  padding-left: 8px;
+}
+
+.timeline-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 4px;
+  line-height: 1.4;
+  transition: color 0.2s;
+}
+
+.timeline-title:hover {
+  color: var(--primary);
+}
+
+.timeline-date {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.timeline-category {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--primary);
+  background: var(--bg);
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
 }
 </style>
