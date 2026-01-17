@@ -60,14 +60,20 @@ marked.use(markedKatex({ throwOnError: false }))
 // Initialize Mermaid
 mermaid.initialize({
   startOnLoad: false,
-  theme: 'neutral',
+  theme: 'default',
   themeVariables: {
-    primaryColor: '#6366f1',
-    primaryTextColor: '#1f2937',
-    primaryBorderColor: '#6366f1',
-    lineColor: '#6366f1',
-    secondaryColor: '#f3f4f6',
-    tertiaryColor: '#fff'
+    primaryColor: '#bbdefb',
+    primaryTextColor: '#000',
+    primaryBorderColor: '#1976d2',
+    lineColor: '#1976d2',
+    secondaryColor: '#e3f2fd',
+    tertiaryColor: '#fff',
+    background: '#fff',
+    mainBkg: '#bbdefb',
+    secondBkg: '#e3f2fd',
+    textColor: '#000',
+    border1: '#1976d2',
+    border2: '#64b5f6'
   }
 })
 
@@ -488,6 +494,7 @@ async function fetchViews(postId) {
 }
 
 .post-content :deep(.mermaid-diagram) {
+  background: #ffffff;
   padding: 24px;
   border-radius: 12px;
   margin: 24px 0;
