@@ -62,9 +62,14 @@ export async function getAllPosts() {
     const { metadata, content } = parseFrontmatter(markdown)
     const id = path.split('/').pop().replace('.md', '')
     const htmlContent = marked(content)
+
+    // 提取纯文本并生成摘要
     const plainText = htmlContent.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
     const decodedText = decodeHtmlEntities(plainText)
-    const excerpt = decodedText.substring(0, 150) + '...'
+
+    // 只取第一段或前100个字符作为摘要
+    const firstParagraph = decodedText.split(/[。！？\n]/).filter(s => s.trim().length > 0)[0] || decodedText
+    const excerpt = firstParagraph.length > 100 ? firstParagraph.substring(0, 100) + '...' : firstParagraph + '...'
 
     posts.push({
       id,
