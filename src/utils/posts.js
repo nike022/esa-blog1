@@ -1,3 +1,18 @@
+import { marked } from 'marked'
+import hljs from 'highlight.js'
+
+// 配置 marked
+marked.setOptions({
+  highlight: function(code, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      return hljs.highlight(code, { language: lang }).value
+    }
+    return hljs.highlightAuto(code).value
+  },
+  breaks: true,
+  gfm: true
+})
+
 // 解析 Markdown 文件的 frontmatter
 export function parseFrontmatter(markdown) {
   const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/
@@ -39,11 +54,14 @@ export async function getAllPosts() {
     const markdown = await postModules[path]()
     const { metadata, content } = parseFrontmatter(markdown)
     const id = path.split('/').pop().replace('.md', '')
+    const htmlContent = marked(content)
+    const excerpt = content.substring(0, 150).replace(/[#*`]/g, '') + '...'
 
     posts.push({
       id,
       ...metadata,
-      content
+      content: htmlContent,
+      excerpt
     })
   }
 
@@ -62,10 +80,11 @@ export async function getPost(id) {
   if (postModules[path]) {
     const markdown = await postModules[path]()
     const { metadata, content } = parseFrontmatter(markdown)
+    const htmlContent = marked(content)
     return {
       id,
       ...metadata,
-      content
+      content: htmlContent
     }
   }
 
