@@ -189,6 +189,14 @@ onMounted(async () => {
   min-width: 0;
 }
 
+.sidebar-wrapper {
+  position: sticky;
+  top: 88px;
+  align-self: flex-start;
+  max-height: calc(100vh - 104px);
+  overflow-y: auto;
+}
+
 .posts-list {
   display: flex;
   flex-direction: column;
