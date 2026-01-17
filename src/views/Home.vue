@@ -1,73 +1,76 @@
 <template>
   <div class="home">
-    <h2>文章列表</h2>
-    <div class="posts">
-      <div v-for="post in posts" :key="post.id" class="post-card">
-        <h3>
-          <router-link :to="`/post/${post.id}`">{{ post.title }}</router-link>
-        </h3>
-        <p class="date">{{ post.date }}</p>
-      </div>
+    <div class="posts-container">
+      <article v-for="post in posts" :key="post.id" class="post-card">
+        <router-link :to="`/post/${post.id}`" class="post-link">
+          <h2 class="post-title">{{ post.title }}</h2>
+          <div class="post-meta">
+            <span class="post-date">{{ post.date }}</span>
+          </div>
+          <p class="post-excerpt">{{ post.excerpt }}</p>
+        </router-link>
+      </article>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { getAllPosts } from '../utils/posts'
 
-const posts = ref([
-  { id: 'hello-world', title: 'Hello World', date: '2026-01-17' },
-  { id: 'vue3-intro', title: 'Vue 3 入门', date: '2026-01-16' },
-  { id: 'esa-pages', title: 'ESA Pages 部署指南', date: '2026-01-15' }
-])
+const posts = ref([])
+
+onMounted(async () => {
+  posts.value = await getAllPosts()
+})
 </script>
 
 <style scoped>
 .home {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
 }
 
-h2 {
-  margin-bottom: 1.5rem;
-  color: #2c3e50;
-}
-
-.posts {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.posts-container {
+  display: grid;
+  gap: 2rem;
 }
 
 .post-card {
-  padding: 1.5rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  transition: box-shadow 0.2s;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 2rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid var(--border);
 }
 
 .post-card:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.post-card h3 {
-  margin: 0 0 0.5rem 0;
-}
-
-.post-card a {
-  color: #3498db;
+.post-link {
   text-decoration: none;
+  color: inherit;
 }
 
-.post-card a:hover {
-  text-decoration: underline;
+.post-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
 }
 
-.date {
-  color: #7f8c8d;
+.post-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
   font-size: 0.9rem;
-  margin: 0;
+  color: var(--text-secondary);
+}
+
+.post-excerpt {
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 </style>
