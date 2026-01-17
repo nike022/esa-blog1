@@ -22,6 +22,9 @@
           </div>
 
           <div class="post-content" v-html="renderedContent"></div>
+
+          <!-- Post Navigation -->
+          <PostNavigation :prev-post="prevPost" :next-post="nextPost" />
         </article>
 
         <!-- TOC Sidebar -->
@@ -33,6 +36,9 @@
 
     <!-- Reading Progress Bar -->
     <div class="reading-progress" :style="{ width: readingProgress + '%' }"></div>
+
+    <!-- Scroll to Top Button -->
+    <ScrollToTop />
   </div>
 </template>
 
@@ -43,8 +49,10 @@ import { marked } from 'marked'
 import markedKatex from 'marked-katex-extension'
 import mermaid from 'mermaid'
 import hljs from 'highlight.js'
-import { getPost } from '../utils/posts'
+import { getPost, getAdjacentPosts } from '../utils/posts'
 import TableOfContents from '../components/TableOfContents.vue'
+import PostNavigation from '../components/PostNavigation.vue'
+import ScrollToTop from '../components/ScrollToTop.vue'
 
 // Configure marked with KaTeX extension
 marked.use(markedKatex({ throwOnError: false }))
@@ -58,6 +66,8 @@ const loading = ref(true)
 const error = ref('')
 const views = ref(null)
 const readingProgress = ref(0)
+const prevPost = ref(null)
+const nextPost = ref(null)
 
 const renderedContent = computed(() => {
   if (!post.value) return ''
@@ -182,6 +192,11 @@ onMounted(async () => {
   if (postData) {
     post.value = postData
     fetchViews(route.params.id)
+
+    // 获取相邻文章
+    const adjacent = await getAdjacentPosts(route.params.id)
+    prevPost.value = adjacent.prev
+    nextPost.value = adjacent.next
   } else {
     error.value = '文章不存在'
   }

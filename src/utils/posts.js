@@ -104,3 +104,18 @@ export async function getPost(id) {
 
   return null
 }
+
+// 获取相邻文章（上一篇和下一篇）
+export async function getAdjacentPosts(currentId) {
+  const allPosts = await getAllPosts()
+  const currentIndex = allPosts.findIndex(post => post.id === currentId)
+
+  if (currentIndex === -1) {
+    return { prev: null, next: null }
+  }
+
+  return {
+    prev: currentIndex > 0 ? allPosts[currentIndex - 1] : null,
+    next: currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
+  }
+}
