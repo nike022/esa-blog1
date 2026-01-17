@@ -3,6 +3,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'
 import Home from './views/Home.vue'
 import Post from './views/Post.vue'
+import Archive from './views/Archive.vue'
+import Categories from './views/Categories.vue'
+import Tags from './views/Tags.vue'
 import About from './views/About.vue'
 import 'highlight.js/styles/atom-one-dark.css'
 
@@ -11,10 +14,10 @@ const router = createRouter({
   routes: [
     { path: '/', component: Home },
     { path: '/post/:id', component: Post },
-    { path: '/about', component: About },
-    { path: '/archive', redirect: '/' },
-    { path: '/categories', redirect: '/' },
-    { path: '/tags', redirect: '/' }
+    { path: '/archive', component: Archive },
+    { path: '/categories', component: Categories },
+    { path: '/tags', component: Tags },
+    { path: '/about', component: About }
   ],
   scrollBehavior() {
     return { top: 0 }
