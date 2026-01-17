@@ -79,6 +79,8 @@ watch(renderedContent, async (newContent) => {
   if (newContent) {
     await nextTick()
     await nextTick()
+    await nextTick()
+    await nextTick() // Extra ticks to ensure v-html completes
     await renderMermaid()
     addCopyButtons()
     wrapTables()
@@ -88,30 +90,42 @@ watch(renderedContent, async (newContent) => {
 
 const renderMermaid = async () => {
   console.log('🎨 === Mermaid Rendering Start ===')
+
+  // Wait for DOM to be ready
+  await nextTick()
   await nextTick()
 
   // Debug: Check the rendered HTML content
   const postContent = document.querySelector('.post-content')
+  if (!postContent) {
+    console.error('❌ .post-content element not found! Retrying...')
+    await nextTick()
+    const retryContent = document.querySelector('.post-content')
+    if (!retryContent) {
+      console.error('❌ Still not found after retry. Aborting.')
+      return
+    }
+    console.log('✅ Found .post-content after retry')
+  }
+
   if (postContent) {
     console.log('📄 Post content HTML length:', postContent.innerHTML.length)
     console.log('📄 Post content preview:', postContent.innerHTML.substring(0, 500))
-  } else {
-    console.error('❌ .post-content element not found!')
   }
 
-  const codeBlocks = document.querySelectorAll('pre code.language-mermaid')
+  const codeBlocks = document.querySelectorAll('.post-content pre code.language-mermaid')
   console.log(`🔍 Found ${codeBlocks.length} Mermaid code blocks`)
 
   if (codeBlocks.length === 0) {
     console.warn('⚠️ No Mermaid blocks found. Checking all code blocks:')
-    const allCodeBlocks = document.querySelectorAll('pre code')
+    const allCodeBlocks = document.querySelectorAll('.post-content pre code')
     console.log(`  Total code blocks found: ${allCodeBlocks.length}`)
     allCodeBlocks.forEach((block, i) => {
       console.log(`  Code block ${i + 1}: class="${block.className}", text preview: "${block.textContent.substring(0, 50)}"`)
     })
 
     // Also check for any pre elements
-    const allPre = document.querySelectorAll('pre')
+    const allPre = document.querySelectorAll('.post-content pre')
     console.log(`  Total <pre> elements found: ${allPre.length}`)
   }
 
