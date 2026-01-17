@@ -3,33 +3,29 @@
     <div class="container-wide">
       <div v-if="loading" class="loading">加载中...</div>
       <div v-else-if="error" class="error">{{ error }}</div>
-      <div v-else>
-        <!-- Breadcrumb -->
-        <Breadcrumb :items="breadcrumbItems" />
-
-        <div class="post-layout">
-          <!-- Main Content -->
-          <article class="post-article">
-            <div class="post-header">
-              <div class="post-category">{{ post.category || '未分类' }}</div>
-              <h1 class="post-title">{{ post.title }}</h1>
-              <div class="post-meta">
-                <span>📅 {{ formatDate(post.date) }}</span>
-                <span>✍️ {{ post.author }}</span>
-                <span v-if="views !== null" class="views">
-                  👁️ {{ views }} 次浏览
-                </span>
-              </div>
-              <div class="post-tags">
-                <span v-for="tag in post.tags" :key="tag" class="tag">#{{ tag }}</span>
-              </div>
+      <div v-else class="post-layout">
+        <!-- Main Content -->
+        <article class="post-article">
+          <div class="post-header">
+            <div class="post-category">{{ post.category || '未分类' }}</div>
+            <h1 class="post-title">{{ post.title }}</h1>
+            <div class="post-meta">
+              <span>📅 {{ formatDate(post.date) }}</span>
+              <span>✍️ {{ post.author }}</span>
+              <span v-if="views !== null" class="views">
+                👁️ {{ views }} 次浏览
+              </span>
             </div>
+            <div class="post-tags">
+              <span v-for="tag in post.tags" :key="tag" class="tag">#{{ tag }}</span>
+            </div>
+          </div>
 
-            <div class="post-content" v-html="renderedContent"></div>
+          <div class="post-content" v-html="renderedContent"></div>
 
-            <!-- Post Navigation -->
-            <PostNavigation :prev-post="prevPost" :next-post="nextPost" />
-          </article>
+          <!-- Post Navigation -->
+          <PostNavigation :prev-post="prevPost" :next-post="nextPost" />
+        </article>
 
         <!-- TOC Sidebar -->
         <aside class="toc-sidebar">
@@ -57,7 +53,6 @@ import { getPost, getAdjacentPosts } from '../utils/posts'
 import TableOfContents from '../components/TableOfContents.vue'
 import PostNavigation from '../components/PostNavigation.vue'
 import ScrollToTop from '../components/ScrollToTop.vue'
-import Breadcrumb from '../components/Breadcrumb.vue'
 
 // Configure marked with KaTeX extension
 marked.use(markedKatex({ throwOnError: false }))
@@ -78,14 +73,6 @@ const contentProcessed = ref(false)
 const renderedContent = computed(() => {
   if (!post.value) return ''
   return marked(post.value.content)
-})
-
-const breadcrumbItems = computed(() => {
-  if (!post.value) return []
-  return [
-    { label: post.value.category || '未分类', to: '/categories' },
-    { label: post.value.title }
-  ]
 })
 
 // Process content after DOM updates
