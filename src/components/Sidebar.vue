@@ -150,7 +150,7 @@ const archives = computed(() => {
     .sort((a, b) => b.date.localeCompare(a.date))
 })
 
-const recentPosts = computed(() => props.posts.slice(0, 8))
+const recentPosts = computed(() => props.posts.slice(0, 6))
 
 const timelinePosts = computed(() => props.posts.slice(0, 6))
 

@@ -1,0 +1,26 @@
+作品访问URL地址：
+https://esa-blog1.e4dd06ac.er.aliyun-esa.net/
+
+Github仓库地址：
+https://github.com/nike022/esa-blog1
+
+作品说明：
+这是一个基于 Vue 3 + Vite 构建的个人博客系统，部署在 Alibaba Cloud ESA Pages 平台。
+
+主要特点：
+1. 操作简单 - 只需编写 Markdown 文件即可发布文章，无需后端配置
+2. 清爽布局 - 采用卡片式设计，界面简洁易读，支持深色/浅色主题切换
+3. 功能完善 - 支持文章分类、标签管理、时间归档、全文搜索等基础功能
+4. 增强渲染 - 支持代码语法高亮、数学公式（KaTeX）、Mermaid图表等高级功能
+5. 响应式设计 - 完美适配桌面和移动设备
+6. 评论系统 - 集成 Waline 评论系统，支持用户互动
+7. 用户体验优化 - 包含面包屑导航、文章目录、阅读进度条、返回顶部等细节功能
+
+技术栈：
+- 前端框架：Vue 3 (Composition API)
+- 构建工具：Vite
+- 路由：Vue Router 4
+- Markdown 渲染：marked.js + highlight.js
+- 部署平台：Alibaba Cloud ESA Pages
+
+本项目由阿里云ESA提供加速、计算和保护。
