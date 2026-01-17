@@ -190,11 +190,7 @@ onMounted(async () => {
 }
 
 .sidebar-wrapper {
-  position: sticky;
-  top: 88px;
-  align-self: flex-start;
-  max-height: calc(100vh - 104px);
-  overflow-y: auto;
+  position: relative;
 }
 
 .posts-list {

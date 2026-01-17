@@ -20,6 +20,9 @@
 
           <div class="post-content" v-html="renderedContent"></div>
 
+          <!-- Waline Comments -->
+          <WalineComment :path="`/post/${route.params.id}`" />
+
           <!-- Post Navigation -->
           <PostNavigation :prev-post="prevPost" :next-post="nextPost" />
         </article>
@@ -50,6 +53,7 @@ import { getPost, getAdjacentPosts } from '../utils/posts'
 import TableOfContents from '../components/TableOfContents.vue'
 import PostNavigation from '../components/PostNavigation.vue'
 import ScrollToTop from '../components/ScrollToTop.vue'
+import WalineComment from '../components/WalineComment.vue'
 
 // Configure marked with KaTeX extension
 marked.use(markedKatex({ throwOnError: false }))
