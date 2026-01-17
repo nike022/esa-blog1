@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed, nextTick, watch } from 'vue'
+import { ref, onMounted, onUnmounted, onUpdated, computed, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { marked } from 'marked'
 import markedKatex from 'marked-katex-extension'
@@ -68,25 +68,30 @@ const views = ref(null)
 const readingProgress = ref(0)
 const prevPost = ref(null)
 const nextPost = ref(null)
+const contentProcessed = ref(false)
 
 const renderedContent = computed(() => {
   if (!post.value) return ''
   return marked(post.value.content)
 })
 
-// Watch for content changes and render Mermaid
-watch(renderedContent, async (newContent) => {
-  if (newContent) {
+// Process content after DOM updates
+onUpdated(async () => {
+  if (!loading.value && !error.value && !contentProcessed.value) {
     await nextTick()
-    await nextTick()
-    await nextTick()
-    await nextTick() // Extra ticks to ensure v-html completes
-    await renderMermaid()
-    addCopyButtons()
-    wrapTables()
-    highlightCode()
+    await processContent()
+    contentProcessed.value = true
   }
 })
+
+const processContent = async () => {
+  console.log('🎨 === Content Processing Start ===')
+  await renderMermaid()
+  addCopyButtons()
+  wrapTables()
+  highlightCode()
+  console.log('✨ === Content Processing Complete ===')
+}
 
 const renderMermaid = async () => {
   console.log('🎨 === Mermaid Rendering Start ===')
