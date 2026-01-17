@@ -42,6 +42,13 @@ export function parseFrontmatter(markdown) {
   return { metadata, content: content.trim() }
 }
 
+// 解码 HTML 实体
+function decodeHtmlEntities(text) {
+  const textarea = document.createElement('textarea')
+  textarea.innerHTML = text
+  return textarea.value
+}
+
 // 获取所有文章
 export async function getAllPosts() {
   const postModules = import.meta.glob('/src/posts/*.md', {
@@ -56,7 +63,8 @@ export async function getAllPosts() {
     const id = path.split('/').pop().replace('.md', '')
     const htmlContent = marked(content)
     const plainText = htmlContent.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
-    const excerpt = plainText.substring(0, 150) + '...'
+    const decodedText = decodeHtmlEntities(plainText)
+    const excerpt = decodedText.substring(0, 150) + '...'
 
     posts.push({
       id,

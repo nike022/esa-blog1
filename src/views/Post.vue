@@ -339,8 +339,8 @@ async function fetchViews(postId) {
   border-radius: 12px;
   margin: 24px 0;
   border: 1px solid var(--border);
-  overflow-x: auto;
-  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .post-content :deep(pre.has-copy-button) {
