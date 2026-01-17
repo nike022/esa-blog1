@@ -16,7 +16,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { getPostById } from '../utils/posts'
+import { getPost } from '../utils/posts'
 
 const route = useRoute()
 const post = ref({
@@ -27,7 +27,7 @@ const post = ref({
 
 onMounted(async () => {
   const postId = route.params.id
-  post.value = await getPostById(postId)
+  post.value = await getPost(postId)
 })
 </script>
 
