@@ -77,30 +77,48 @@ watch(renderedContent, async (newContent) => {
 })
 
 const renderMermaid = async () => {
+  console.log('=== Mermaid Rendering Debug ===')
   await nextTick()
   const codeBlocks = document.querySelectorAll('pre code.language-mermaid')
+  console.log('Found Mermaid code blocks:', codeBlocks.length)
 
   for (let i = 0; i < codeBlocks.length; i++) {
     const codeBlock = codeBlocks[i]
     const code = codeBlock.textContent
     const pre = codeBlock.parentElement
 
+    console.log(`Mermaid block ${i}:`, {
+      codeLength: code.length,
+      codePreview: code.substring(0, 100),
+      hasParent: !!pre
+    })
+
     try {
       const { svg } = await mermaid.render(`mermaid-${Date.now()}-${i}`, code)
+      console.log(`Mermaid block ${i} rendered successfully`)
       const div = document.createElement('div')
       div.className = 'mermaid-diagram'
       div.innerHTML = svg
       pre.replaceWith(div)
     } catch (error) {
-      console.error('Mermaid rendering error:', error)
+      console.error(`Mermaid rendering error for block ${i}:`, error)
+      console.error('Code that failed:', code)
     }
   }
+  console.log('=== Mermaid Rendering Complete ===')
 }
 
 const addCopyButtons = () => {
+  console.log('=== Adding Copy Buttons Debug ===')
   const codeBlocks = document.querySelectorAll('pre:not(.has-copy-button)')
+  console.log('Found code blocks without copy button:', codeBlocks.length)
 
-  codeBlocks.forEach(pre => {
+  codeBlocks.forEach((pre, index) => {
+    console.log(`Code block ${index}:`, {
+      hasCode: !!pre.querySelector('code'),
+      classList: Array.from(pre.classList)
+    })
+
     const button = document.createElement('button')
     button.className = 'copy-button'
     button.textContent = '复制'
@@ -127,6 +145,7 @@ const addCopyButtons = () => {
     pre.appendChild(button)
     pre.classList.add('has-copy-button')
   })
+  console.log('=== Copy Buttons Added ===')
 }
 
 const wrapTables = () => {
@@ -152,10 +171,19 @@ const wrapTables = () => {
 }
 
 const highlightCode = () => {
-  const codeBlocks = document.querySelectorAll('pre code:not(.hljs)')
-  codeBlocks.forEach(block => {
+  console.log('=== Code Highlighting Debug ===')
+  const codeBlocks = document.querySelectorAll('pre code:not(.hljs):not(.language-mermaid)')
+  console.log('Found code blocks to highlight:', codeBlocks.length)
+
+  codeBlocks.forEach((block, index) => {
+    const lang = Array.from(block.classList).find(c => c.startsWith('language-'))
+    console.log(`Code block ${index}:`, {
+      language: lang,
+      codeLength: block.textContent.length
+    })
     hljs.highlightElement(block)
   })
+  console.log('=== Code Highlighting Complete ===')
 }
 
 const formatDate = (dateString) => {
