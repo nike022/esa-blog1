@@ -337,7 +337,6 @@ async function fetchViews(postId) {
   background: #282c34;
   padding: 24px;
   border-radius: 12px;
-  overflow-x: auto;
   margin: 24px 0;
   border: 1px solid var(--border);
 }
