@@ -7,7 +7,7 @@
       </router-link>
 
       <nav class="nav-menu">
-        <router-link to="/" class="nav-link">首页</router-link>
+        <router-link to="/" class="nav-link" @click="handleLogoClick">首页</router-link>
         <router-link to="/archive" class="nav-link">归档</router-link>
         <router-link to="/categories" class="nav-link">分类</router-link>
         <router-link to="/tags" class="nav-link">标签</router-link>
