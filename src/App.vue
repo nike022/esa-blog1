@@ -1,29 +1,42 @@
 <template>
   <div id="app">
-    <Navbar @toggle-theme="toggleTheme" />
+    <header class="header">
+      <h1>我的博客</h1>
+    </header>
     <main>
       <router-view />
     </main>
-    <Footer />
   </div>
 </template>
 
-<script setup>
-import { onMounted } from 'vue'
-import Navbar from './components/Navbar.vue'
-import Footer from './components/Footer.vue'
-
-const toggleTheme = () => {
-  const currentTheme = document.documentElement.getAttribute('data-theme')
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark'
-  document.documentElement.setAttribute('data-theme', newTheme)
-  localStorage.setItem('theme', newTheme)
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-onMounted(() => {
-  const savedTheme = localStorage.getItem('theme')
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-  const theme = savedTheme || (prefersDark ? 'dark' : 'light')
-  document.documentElement.setAttribute('data-theme', theme)
-})
-</script>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+#app {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.header {
+  background: #2c3e50;
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+main {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+</style>
