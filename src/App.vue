@@ -13,6 +13,7 @@ import { onMounted } from 'vue'
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
 import './style.css'
+import 'highlight.js/styles/atom-one-dark.css'
 
 const toggleTheme = () => {
   const currentTheme = document.documentElement.getAttribute('data-theme')
