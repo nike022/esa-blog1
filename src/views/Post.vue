@@ -476,6 +476,24 @@ async function fetchViews(postId) {
   background: var(--bg);
 }
 
+.post-content :deep(.mermaid-diagram) {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  margin: 24px 0;
+  border: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+[data-theme="dark"] .post-content :deep(.mermaid-diagram) {
+  background: #1e1e1e;
+}
+
+.post-content :deep(.mermaid-diagram svg) {
+  max-width: 100%;
+  height: auto;
+}
+
 .toc-sidebar {
   position: relative;
 }
