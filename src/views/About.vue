@@ -1,15 +1,20 @@
 <template>
-  <div class="about-page">
+  <div class="page">
     <div class="container">
-      <article class="about-content">
-        <h1 class="page-title">关于我</h1>
+      <div class="page-header">
+        <h1>关于我</h1>
+        <p>欢迎来到我的个人博客</p>
+      </div>
 
+      <div class="about-content">
+        <!-- 个人简介 -->
         <section class="about-section">
           <h2>👋 你好</h2>
           <p>我是一名热爱技术的开发者，专注于前端开发和全栈技术。这个博客是我分享技术心得、记录学习历程和生活感悟的地方。</p>
           <p>在这里，你可以找到关于Web开发、编程技巧、技术思考以及个人成长的文章。我相信通过分享和交流，我们可以共同进步。</p>
         </section>
 
+        <!-- 技术栈 -->
         <section class="about-section">
           <h2>💻 技术栈</h2>
           <div class="tech-categories">
@@ -45,6 +50,7 @@
           </div>
         </section>
 
+        <!-- 博客信息 -->
         <section class="about-section">
           <h2>📝 关于本站</h2>
           <div class="blog-info">
@@ -69,6 +75,7 @@
           </div>
         </section>
 
+        <!-- 联系方式 -->
         <section class="about-section">
           <h2>📫 联系方式</h2>
           <p>如果你想与我交流技术、分享想法或者有任何建议，欢迎通过以下方式联系我：</p>
@@ -84,6 +91,7 @@
           </div>
         </section>
 
+        <!-- 兴趣爱好 -->
         <section class="about-section">
           <h2>🎯 兴趣爱好</h2>
           <ul class="interests-list">
@@ -94,69 +102,70 @@
             <li>🌍 旅行和摄影</li>
           </ul>
         </section>
-      </article>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.about-page {
+.page {
   min-height: 100vh;
-  background: var(--bg);
-  padding: 80px 0 120px;
+  padding: 80px 20px 120px;
 }
 
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.about-content {
-  background: var(--bg-secondary);
-  border-radius: 16px;
-  padding: 60px;
-  border: 1px solid var(--border);
-}
-
-.page-title {
-  font-size: 48px;
-  font-weight: 800;
-  margin-bottom: 60px;
+.page-header {
   text-align: center;
+  margin-bottom: 80px;
+}
+
+.page-header h1 {
+  font-size: 56px;
+  font-weight: 800;
+  margin-bottom: 16px;
   background: var(--gradient-1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.about-section {
-  margin-bottom: 48px;
+.page-header p {
+  font-size: 18px;
+  color: var(--text-secondary);
 }
 
-.about-section:last-child {
-  margin-bottom: 0;
+.about-content {
+  display: grid;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-section {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid var(--border);
 }
 
 .about-section h2 {
   font-size: 28px;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 20px;
+  margin: 0 0 20px 0;
 }
 
 .about-section h3 {
   font-size: 18px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 12px;
+  margin: 0 0 12px 0;
 }
 
 .about-section p {
   font-size: 16px;
   line-height: 1.8;
   color: var(--text-secondary);
-  margin-bottom: 16px;
+  margin: 0 0 16px 0;
 }
 
 .about-section p:last-child {
@@ -164,9 +173,9 @@
 }
 
 .tech-categories {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .tech-category {
@@ -201,18 +210,18 @@
 
 .blog-info {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 24px;
-  padding: 24px;
-  background: var(--bg);
-  border-radius: 12px;
-  border: 1px solid var(--border);
 }
 
 .info-item {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 20px;
+  background: var(--bg);
+  border-radius: 12px;
+  border: 1px solid var(--border);
 }
 
 .info-label {
@@ -241,7 +250,6 @@
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
-  margin-top: 16px;
 }
 
 .contact-link {
@@ -275,6 +283,7 @@
   padding: 0;
   margin: 0;
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 12px;
 }
 
@@ -295,29 +304,28 @@
 }
 
 @media (max-width: 768px) {
-  .about-page {
-    padding: 60px 0 80px;
+  .page {
+    padding: 60px 20px 80px;
   }
 
-  .about-content {
-    padding: 40px 28px;
+  .page-header h1 {
+    font-size: 40px;
   }
 
-  .page-title {
-    font-size: 36px;
-    margin-bottom: 40px;
+  .about-section {
+    padding: 24px;
   }
 
-  .about-section h2 {
-    font-size: 24px;
+  .tech-categories {
+    grid-template-columns: 1fr;
   }
 
   .blog-info {
     grid-template-columns: 1fr;
   }
 
-  .contact-links {
-    flex-direction: column;
+  .interests-list {
+    grid-template-columns: 1fr;
   }
 }
 </style>
