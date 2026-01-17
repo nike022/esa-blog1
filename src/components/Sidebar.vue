@@ -152,7 +152,7 @@ const archives = computed(() => {
 
 const recentPosts = computed(() => props.posts.slice(0, 8))
 
-const timelinePosts = computed(() => props.posts.slice(0, 10))
+const timelinePosts = computed(() => props.posts.slice(0, 6))
 
 const getTagSize = (count) => {
   const maxCount = Math.max(...tags.value.map(t => t.count))

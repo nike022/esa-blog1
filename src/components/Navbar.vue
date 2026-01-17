@@ -1,7 +1,7 @@
 <template>
   <header class="navbar">
     <div class="container">
-      <router-link to="/" class="logo">
+      <router-link to="/" class="logo" @click="handleLogoClick">
         <span class="logo-icon">📝</span>
         <span class="logo-text">我的博客</span>
       </router-link>
@@ -34,7 +34,17 @@
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router'
+
 defineEmits(['toggle-theme'])
+
+const route = useRoute()
+
+const handleLogoClick = () => {
+  if (route.path === '/') {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+}
 </script>
 
 <style scoped>
