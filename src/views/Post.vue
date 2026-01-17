@@ -3,12 +3,13 @@
     <div class="container-wide">
       <div v-if="loading" class="loading">加载中...</div>
       <div v-else-if="error" class="error">{{ error }}</div>
-      <div v-else class="post-layout">
+      <div v-else>
         <!-- Breadcrumb -->
         <Breadcrumb :items="breadcrumbItems" />
 
-        <!-- Main Content -->
-        <article class="post-article">
+        <div class="post-layout">
+          <!-- Main Content -->
+          <article class="post-article">
           <div class="post-header">
             <div class="post-category">{{ post.category || '未分类' }}</div>
             <h1 class="post-title">{{ post.title }}</h1>
