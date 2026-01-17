@@ -118,32 +118,44 @@ const decodeHtmlEntities = (text) => {
 const renderMermaid = async () => {
   await nextTick()
   const codeBlocks = document.querySelectorAll('pre code.language-mermaid')
+  console.log(`🔍 Found ${codeBlocks.length} Mermaid code blocks`)
 
   for (let i = 0; i < codeBlocks.length; i++) {
     const codeBlock = codeBlocks[i]
     let code = codeBlock.textContent.trim()
     const pre = codeBlock.parentElement
 
-    if (!code) continue
+    console.log(`📊 Processing Mermaid block ${i + 1}:`, code.substring(0, 50) + '...')
+
+    if (!code) {
+      console.warn(`⚠️ Block ${i + 1} is empty, skipping`)
+      continue
+    }
 
     code = decodeHtmlEntities(code)
+    console.log(`🔤 Decoded HTML entities for block ${i + 1}`)
 
     try {
       const { svg } = await mermaid.render(`mermaid-${Date.now()}-${i}`, code)
+      console.log(`✅ Successfully rendered Mermaid block ${i + 1}, SVG length: ${svg.length}`)
       const div = document.createElement('div')
       div.className = 'mermaid-diagram'
       div.innerHTML = svg
       pre.replaceWith(div)
+      console.log(`🔄 Replaced <pre> with <div class="mermaid-diagram"> for block ${i + 1}`)
     } catch (error) {
-      console.error(`Mermaid rendering error for block ${i}:`, error)
+      console.error(`❌ Mermaid rendering error for block ${i + 1}:`, error)
+      console.error(`Code that failed:`, code)
     }
   }
+  console.log(`✨ Mermaid rendering complete`)
 }
 
 const addCopyButtons = () => {
   const codeBlocks = document.querySelectorAll('pre:not(.has-copy-button)')
+  console.log(`📋 Found ${codeBlocks.length} code blocks without copy buttons`)
 
-  codeBlocks.forEach((pre) => {
+  codeBlocks.forEach((pre, index) => {
     const button = document.createElement('button')
     button.className = 'copy-button'
     button.textContent = '复制'
@@ -152,6 +164,7 @@ const addCopyButtons = () => {
       if (code) {
         try {
           await navigator.clipboard.writeText(code.textContent)
+          console.log(`✅ Copied code block ${index + 1} to clipboard`)
           button.textContent = '已复制!'
           button.classList.add('copied')
           setTimeout(() => {
@@ -159,7 +172,7 @@ const addCopyButtons = () => {
             button.classList.remove('copied')
           }, 2000)
         } catch (err) {
-          console.error('复制失败:', err)
+          console.error(`❌ Failed to copy code block ${index + 1}:`, err)
           button.textContent = '复制失败'
           setTimeout(() => {
             button.textContent = '复制'
@@ -169,7 +182,9 @@ const addCopyButtons = () => {
     }
     pre.appendChild(button)
     pre.classList.add('has-copy-button')
+    console.log(`➕ Added copy button to code block ${index + 1}`)
   })
+  console.log(`✨ Copy buttons added to all code blocks`)
 }
 
 const wrapTables = () => {
@@ -186,10 +201,15 @@ const wrapTables = () => {
 
 const highlightCode = () => {
   const codeBlocks = document.querySelectorAll('pre code:not(.hljs):not(.language-mermaid)')
+  console.log(`💻 Found ${codeBlocks.length} code blocks to highlight`)
 
-  codeBlocks.forEach((block) => {
+  codeBlocks.forEach((block, index) => {
+    const language = block.className.match(/language-(\w+)/)?.[1] || 'plaintext'
+    console.log(`🎨 Highlighting code block ${index + 1} (language: ${language})`)
     hljs.highlightElement(block)
+    console.log(`✅ Highlighted code block ${index + 1}`)
   })
+  console.log(`✨ Code highlighting complete`)
 }
 
 const formatDate = (dateString) => {
